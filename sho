@@ -3,8 +3,13 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use Sho\CommandManager;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
+
+$command_manager = new CommandManager();
+$commands = $command_manager->getCommands();
+$application->addCommands($commands);
 
 $application->run();
