@@ -1,0 +1,19 @@
+name: hello:world
+aliases:
+  - hw
+description: Prints out hello world message using shell.
+options:
+  - name: greeting
+    shortcut: g
+    required: false
+    type: string
+    description: Greeting text.
+    default: Hello
+    suggested_values: []
+arguments:
+  required: 1
+  optional: 2
+command: |
+  echo "$greeting world"
+  echo "args: $args"
+  echo "arg 1: $arg_1"

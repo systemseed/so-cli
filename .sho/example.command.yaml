@@ -1,0 +1,23 @@
+name: example:command
+aliases:
+  - ec
+description: Example command.
+flavour: drupal
+ignore: true
+hide: false
+options:
+  - name: example
+    shortcut: e
+    required: true|false
+    type: bool|string|array
+    description: Greeting text.
+    default: Example string
+    suggested_values:
+      - Hello
+arguments:
+  required: 1
+  optional: 2
+command: |
+  echo "Example string: $example"
+  echo "args: $args"
+  echo "arg 1: $arg_1"

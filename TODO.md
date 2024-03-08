@@ -1,0 +1,11 @@
+# TODO
+- Parse the folder directory for .sho/*.command.yml
+- Exclude examples.
+- Add validation.
+- Add flavour support.
+- Add version support.
+- Add hide command support.
+- Add project config file support.
+- Add ignore file.
+- What does the suggested values in symfony console does?
+- Improve and streamline variable naming for arguments and options. Possibly allow changing arg names.
