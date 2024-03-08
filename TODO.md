@@ -9,5 +9,6 @@
 - Add ignore file.
 - Add support of .env files
 - Add support of dependant commands
+- Add support of reusable bash functions
 - What does the suggested values in symfony console does?
 - Improve and streamline variable naming for arguments and options. Possibly allow changing arg names.
