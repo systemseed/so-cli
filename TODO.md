@@ -12,3 +12,6 @@
 - Add support of reusable bash functions
 - What does the suggested values in symfony console does?
 - Improve and streamline variable naming for arguments and options. Possibly allow changing arg names.
+- Allow command definition by other packages.
+- Allow command override per project basis.
+- Create composer package.
