@@ -1,5 +1,5 @@
 # TODO
-- Parse the folder directory for `.so/*.command.yml`.
+- Provide default helper commands (for instance `so:generate`).
 - Exclude examples.
 - Add validation.
 - Add flavour support.
