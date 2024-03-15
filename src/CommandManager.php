@@ -1,6 +1,6 @@
 <?php
 
-namespace Sho;
+namespace SoCli;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,6 +23,11 @@ class CommandManager
             $command->setName($command_config['name']);
             $command->setAliases($command_config['aliases']);
 
+            if (!empty($command_config['description'])) {
+              $command->setDescription($command_config['description']);
+            }
+
+            // TODO: Handle the configuration values.
             $command->addArgument(
                 'arguments',
                 InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
@@ -74,7 +79,7 @@ class CommandManager
     protected function loadCommandConfigFiles()
     {
 
-        $file_path = './' . Constants::SHO_COMMAND_CONFIG_FOLDER . '/hello_world.command.yaml';
+        $file_path = './' . Constants::SO_CLI_COMMAND_CONFIG_FOLDER . '/hello_world.command.yaml';
 
         $command = Yaml::parseFile($file_path);
 

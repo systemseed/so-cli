@@ -1,5 +1,5 @@
 # TODO
-- Parse the folder directory for .sho/*.command.yml
+- Parse the folder directory for `.so/*.command.yml`.
 - Exclude examples.
 - Add validation.
 - Add flavour support.
@@ -7,12 +7,14 @@
 - Add hide command support.
 - Add project config file support.
 - Add ignore file.
-- Add support of .env files
-- Add support of dependant commands
-- Add support of reusable bash functions
+- Add support of .env files.
+- Add support of dependant commands.
+- Add support of reusable bash functions.
 - What does the suggested values in symfony console does?
-- Improve and streamline variable naming for arguments and options. Possibly allow changing arg names. Perhaps use custom tags: https://symfony.com/doc/current/components/yaml.html#parsing-and-dumping-custom-tags
+- Improve and streamline variable naming for arguments and options. Possibly allow changing arg names. Perhaps use custom tags: https://symfony.com/doc/current/components/yaml.html#parsing-and-dumping-custom-tags.
 - Allow command definition by other packages.
 - Allow command override per project basis.
 - Create composer package.
-- Create schema for yaml commands file (ide autocomplete, possibly validation)
+- Create schema for yaml commands file (ide autocomplete, possibly validation).
+- META: Rewrite on native compilable language (presumably Go).
+- Add support of so-called "package manager" for exchanging command files.

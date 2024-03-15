@@ -1,11 +1,11 @@
 <?php
 
-namespace Sho;
+namespace SoCli;
 
 class Constants {
 
     /**
      * Name of the folder inside project root that contains configs.
      */
-    const SHO_COMMAND_CONFIG_FOLDER = '.sho';
+    const SO_CLI_COMMAND_CONFIG_FOLDER = '.so-cli';
 }
