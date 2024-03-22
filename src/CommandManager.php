@@ -7,19 +7,41 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
 class CommandManager {
 
+  protected $configDir;
+
+  public function __construct() {
+    $this->configDir = $this->getConfigDir(getcwd());
+  }
+
   public function getCommands(): array {
+    $config = $this->loadConfigFile();
     $command_configs = $this->loadCommandConfigFiles();
+
+    // Load env files.
+    if (isset($config['env_file'])) {
+      $dotenv = new Dotenv();
+      foreach ($config['env_file'] as $env_file) {
+        $env_file = realpath($this->configDir . '/' . $env_file);
+        if ($env_file) {
+          $dotenv->load($env_file);
+        }
+      }
+    }
 
     $commands = [];
     foreach ($command_configs as $command_config) {
       $command = new Command();
       $command->setName($command_config['name']);
-      $command->setAliases($command_config['aliases']);
+
+      if (isset($command_config['aliases'])) {
+        $command->setAliases($command_config['aliases']);
+      }
 
       if (!empty($command_config['description'])) {
         $command->setDescription($command_config['description']);
@@ -31,27 +53,29 @@ class CommandManager {
         InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
         'List of optional arguments.'
       );
-      foreach ($command_config['options'] as $option) {
-        $type = InputOption::VALUE_NONE | InputOption::VALUE_NEGATABLE;
+      if (isset($command_config['options'])) {
+        foreach ($command_config['options'] as $option) {
+          $type = InputOption::VALUE_NONE | InputOption::VALUE_NEGATABLE;
 
-        $required = $option['required'] ? InputOption::VALUE_REQUIRED : InputOption::VALUE_OPTIONAL;
-        if ($option['type'] == 'array') {
-          $type = $required | InputOption::VALUE_IS_ARRAY;
-        }
-        else {
-          if ($option['type'] == 'string') {
-            $type = $required;
+          $required = $option['value_required'] ? InputOption::VALUE_REQUIRED : InputOption::VALUE_OPTIONAL;
+          if ($option['value_type'] == 'array') {
+            $type = $required | InputOption::VALUE_IS_ARRAY;
           }
-        }
+          else {
+            if ($option['value_type'] == 'string') {
+              $type = $required;
+            }
+          }
 
-        $command->addOption(
-          $option['name'],
-          $option['shortcut'],
-          $type,
-          $option['description'],
-          $option['default'],
-          $option['suggested_values'],
-        );
+          $command->addOption(
+            $option['name'],
+            $option['shortcut'],
+            $type,
+            $option['description'],
+            $option['default'] ?? null,
+            $option['suggested_values'],
+          );
+        }
       }
 
       $command->setCode(function(InputInterface $input, OutputInterface $output) use ($command_config): int {
@@ -62,8 +86,13 @@ class CommandManager {
         }
 
         $process = Process::fromShellCommandline($command_config['command']);
-        $process->run(NULL, $input->getOptions() + $arguments);
-        $output->write($process->getOutput());
+        $process->setTimeout(null);
+        $process->run(function ($type, $buffer) use ($output) {
+          $output->setDecorated(true);
+          $output->write($buffer);
+        }, $_ENV + $input->getOptions() + $arguments + [
+          'project_root' => realpath($this->configDir . '/..' ?? '.')
+        ]);
 
         return Command::SUCCESS;
       });
@@ -75,19 +104,37 @@ class CommandManager {
   }
 
   /**
+   * Returns configurations.
+   *
+   * @return array
+   *   The config array.
+   */
+  protected function loadConfigFile() {
+    if (!$this->configDir) {
+      return [];
+    }
+
+    $config_file = realpath($this->configDir . '/config.yaml');
+    if ($config_file) {
+      return Yaml::parseFile($config_file);
+    }
+
+    return [];
+  }
+
+  /**
    * Returns commands from config files.
    *
    * @return array
    *   The commands config array.
    */
   protected function loadCommandConfigFiles(): array {
-    $config_dir = $this->getConfigDir(getcwd());
-    if (!$config_dir) {
-      // TODO: Notify user that no config file found and so on.
+    if (!$this->configDir) {
       return [];
     }
+
     $commands = [];
-    foreach (glob($config_dir . '/*.command.yaml') as $file_path) {
+    foreach (glob($this->configDir . '/*.command.yaml') as $file_path) {
       $commands[] = Yaml::parseFile($file_path);
     }
 
