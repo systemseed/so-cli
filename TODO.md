@@ -1,5 +1,5 @@
 # TODO
-- Parse the folder directory for `.so/*.command.yml`.
+- Provide default helper commands (for instance `so:generate`).
 - Exclude examples.
 - Add validation.
 - Add flavour support.
@@ -18,3 +18,7 @@
 - Create schema for yaml commands file (ide autocomplete, possibly validation).
 - META: Rewrite on native compilable language (presumably Go).
 - Add support of so-called "package manager" for exchanging command files.
+- Env variable with project root path.
+- Make sure to use only env variables parsed by symfony/dotenv.
+- Figure out how to persist original message colors (docker messages should be colorful).
+- Handle the failed commands?
