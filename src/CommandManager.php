@@ -53,6 +53,8 @@ class CommandManager {
         InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
         'List of optional arguments.'
       );
+
+      $command->ignoreValidationErrors();
       if (isset($command_config['options'])) {
         foreach ($command_config['options'] as $option) {
           $type = InputOption::VALUE_NONE | InputOption::VALUE_NEGATABLE;
@@ -80,16 +82,20 @@ class CommandManager {
 
       $command->setCode(function(InputInterface $input, OutputInterface $output) use ($command_config): int {
         // TODO check how many arguments (required, optional).
-        $arguments = ['args' => implode(' ', $input->getArgument('arguments'))];
+        $arguments = [
+          'args' => implode(' ', $input->getArgument('arguments')),
+          'command' => substr($input->__toString(), strlen($input->getFirstArgument()) + 1)
+        ];
+
         foreach ($input->getArgument('arguments') as $key => $argument) {
           $arguments['arg_' . $key + 1] = $argument;
         }
 
         $process = Process::fromShellCommandline($command_config['command']);
-        $process->setTimeout(null);
-        $process->run(function ($type, $buffer) use ($output) {
-          $output->setDecorated(true);
-          $output->write($buffer);
+        $process->setTty(TRUE);
+        $process->setTimeout(NULL);
+        $process->run(function ($type, $buffer) {
+          echo $buffer;
         }, $_ENV + $input->getOptions() + $arguments + [
           'project_root' => realpath($this->configDir . '/..' ?? '.')
         ]);
