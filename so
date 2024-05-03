@@ -5,6 +5,33 @@ use SoCli\CommandManager;
 use SoCli\Command\PullCommands;
 use Symfony\Component\Console\Application;
 
+// We use PWD if available because getcwd() resolves symlinks, which  could take
+// us outside of the Drupal root, making it impossible to find. In addition,
+// is_dir() is used as the provided path may not be recognizable by PHP. For
+// instance, Cygwin adds a '/cygdrive' prefix to the path which is a virtual
+// directory.
+$cwd = isset($_SERVER['PWD']) && is_dir($_SERVER['PWD']) ? $_SERVER['PWD'] : getcwd();
+
+$autoloadFile = FALSE;
+// Set up autoloader
+$candidates = [
+  $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php', // https://getcomposer.org/doc/articles/vendor-binaries.md#finding-the-composer-autoloader-from-a-binary
+  dirname(__DIR__, 2) . '/autoload.php',
+  __DIR__ . '/vendor/autoload.php', // For development of so itself.
+];
+foreach ($candidates as $candidate) {
+  if (file_exists($candidate)) {
+    $autoloadFile = $candidate;
+    break;
+  }
+}
+if (!$autoloadFile) {
+  throw new \Exception("Could not locate autoload.php. cwd is $cwd; __DIR__ is " . __DIR__);
+}
+$loader = include $autoloadFile;
+if (!$loader) {
+  throw new \Exception("Invalid autoloadfile: $autoloadFile. cwd is $cwd; __DIR__ is " . __DIR__);
+}
 
 $application = new Application();
 $application->addCommands([
