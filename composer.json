@@ -7,6 +7,10 @@
         "symfony/process": "^7.0",
         "symfony/dotenv": "^7.0"
     },
+    "bin": [
+        "so"
+    ],
+    "license": "GNU General Public License 3",
     "autoload": {
         "psr-4": {
             "SoCli\\": "src/"
