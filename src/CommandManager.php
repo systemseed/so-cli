@@ -9,25 +9,25 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Yaml\Yaml;
 
 class CommandManager {
 
-  protected $configDir;
+  protected Configuration $configuration;
 
   public function __construct() {
-    $this->configDir = $this->getConfigDir(getcwd());
+    $this->configuration = new Configuration();
   }
 
   public function getCommands(): array {
-    $config = $this->loadConfigFile();
-    $command_configs = $this->loadCommandConfigFiles();
+    $config_dir = $this->configuration->getConfigDir();
+    $config = $this->configuration->loadConfigFile();
+    $command_configs = $this->configuration->loadCommandConfigFiles();
 
     // Load env files.
     if (isset($config['env_file'])) {
       $dotenv = new Dotenv();
       foreach ($config['env_file'] as $env_file) {
-        $env_file = realpath($this->configDir . '/' . $env_file);
+        $env_file = realpath($config_dir . '/' . $env_file);
         if ($env_file) {
           $dotenv->load($env_file);
         }
@@ -59,12 +59,12 @@ class CommandManager {
         foreach ($command_config['options'] as $option) {
           $type = InputOption::VALUE_NONE | InputOption::VALUE_NEGATABLE;
 
-          $required = $option['value_required'] ? InputOption::VALUE_REQUIRED : InputOption::VALUE_OPTIONAL;
-          if ($option['value_type'] == 'array') {
+          $required = $option['required'] ? InputOption::VALUE_REQUIRED : InputOption::VALUE_OPTIONAL;
+          if ($option['type'] == 'array') {
             $type = $required | InputOption::VALUE_IS_ARRAY;
           }
           else {
-            if ($option['value_type'] == 'string') {
+            if ($option['type'] == 'string') {
               $type = $required;
             }
           }
@@ -80,7 +80,7 @@ class CommandManager {
         }
       }
 
-      $command->setCode(function(InputInterface $input, OutputInterface $output) use ($command_config): int {
+      $command->setCode(function(InputInterface $input, OutputInterface $output) use ($config_dir, $command_config): int {
         // TODO check how many arguments (required, optional).
         $arguments = [
           'args' => implode(' ', $input->getArgument('arguments')),
@@ -97,7 +97,7 @@ class CommandManager {
         $process->run(function ($type, $buffer) {
           echo $buffer;
         }, $_ENV + $input->getOptions() + $arguments + [
-          'project_root' => realpath($this->configDir . '/..' ?? '.')
+          'project_root' => realpath($config_dir . '/..' ?? '.')
         ]);
 
         return Command::SUCCESS;
@@ -107,71 +107,6 @@ class CommandManager {
     }
 
     return $commands;
-  }
-
-  /**
-   * Returns configurations.
-   *
-   * @return array
-   *   The config array.
-   */
-  protected function loadConfigFile() {
-    if (!$this->configDir) {
-      return [];
-    }
-
-    $config_file = realpath($this->configDir . '/config.yaml');
-    if ($config_file) {
-      return Yaml::parseFile($config_file);
-    }
-
-    return [];
-  }
-
-  /**
-   * Returns commands from config files.
-   *
-   * @return array
-   *   The commands config array.
-   */
-  protected function loadCommandConfigFiles(): array {
-    if (!$this->configDir) {
-      return [];
-    }
-
-    $commands = [];
-    foreach (glob($this->configDir . '/*.command.yaml') as $file_path) {
-      $commands[] = Yaml::parseFile($file_path);
-    }
-
-    return $commands;
-  }
-
-  /**
-   * Returns config files folder.
-   *
-   * @param string $current_dir
-   *   The current folder path.
-   *
-   * @return string|null
-   *   The commands config array.
-   */
-  protected function getConfigDir(string $current_dir): ?string {
-    $config_dir = $current_dir . '/' . Constants::SO_CLI_CONFIG_FOLDER_NAME;
-    // TODO: Print iterated folders in verbose mode ($output->isVerbose()).
-    if (is_dir($config_dir)) {
-      return $config_dir;
-    }
-    else if ($current_dir != '/') {
-      $parent_dir = realpath($current_dir . '/..');
-      if (!$parent_dir) {
-        return null;
-      }
-
-      return $this->getConfigDir($parent_dir);
-    }
-
-    return null;
   }
 
 }
