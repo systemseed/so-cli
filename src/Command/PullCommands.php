@@ -41,11 +41,20 @@ class PullCommands extends Command {
 
     $output->writeln('<comment>Pulling commands to "' . $global_config_dir . '" ...</comment>');
     $url = $input->getArgument('url');
-    // TODO: Download zip and unpack it instead of cloning to exclude git dependency.
+    // TODO 1: Download zip and unpack it instead of cloning to exclude git dependency.
+    // TODO 2: Replace md5($url) with real folder name and allows to pass destination folder.
+    $process = Process::fromShellCommandline('rm -rf ' . md5($url), $global_config_dir);
+    $process->run();
+
+    if (!$process->isSuccessful()) {
+      throw new ProcessFailedException($process);
+    }
+
     $command = [
       'git',
       'clone',
       $url,
+      md5($url),
     ];
     $process = Process::fromShellCommandline(implode(' ', $command), $global_config_dir);
     $process->run();
