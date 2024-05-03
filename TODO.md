@@ -1,24 +1,24 @@
-# TODO
-- Provide default helper commands (for instance `so:generate`).
-- Exclude examples.
-- Add validation.
+# Beta
 - Add flavour support.
-- Add version support.
-- Add hide command support.
-- Add project config file support.
-- Add ignore file.
-- Add support of .env files.
+- Add project config file support. (IN PROGRESS)
 - Add support of dependant commands.
-- Add support of reusable bash functions.
-- What does the suggested values in symfony console does?
-- Improve and streamline variable naming for arguments and options. Possibly allow changing arg names. Perhaps use custom tags: https://symfony.com/doc/current/components/yaml.html#parsing-and-dumping-custom-tags.
-- Allow command definition by other packages.
+- Add support of reusable bash functions ?
+- Improve and streamline variable naming for arguments and options. Possibly allow changing arg names.
 - Allow command override per project basis.
-- Create composer package.
+- Create composer package. (DONE)
+- Env variable with project root path.
+- To check: Make sure to use only env variables parsed by symfony/dotenv.
+
+# Release Candidate
+- Add validation.
+
+# Stable Release
+- Provide default helper commands (for instance `so:generate`).
+- Add hide command support.
+- Add version support.
+- Allow command definition by other packages.
 - Create schema for yaml commands file (ide autocomplete, possibly validation).
+
+# Future plans
 - META: Rewrite on native compilable language (presumably Go).
 - Add support of so-called "package manager" for exchanging command files.
-- Env variable with project root path.
-- Make sure to use only env variables parsed by symfony/dotenv.
-- Figure out how to persist original message colors (docker messages should be colorful).
-- Handle the failed commands?
