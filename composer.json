@@ -10,7 +10,7 @@
     "bin": [
         "so"
     ],
-    "license": "GNU General Public License 3",
+    "license": "GPL-3.0-only",
     "autoload": {
         "psr-4": {
             "SoCli\\": "src/"
