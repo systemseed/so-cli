@@ -11,6 +11,7 @@
 
 # Release Candidate
 - Add validation.
+- Create WS https://so-cli.dev/
 
 # Stable Release
 - Provide default helper commands (for instance `so:generate`).
