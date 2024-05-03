@@ -35,11 +35,11 @@ class PullCommands extends Command {
       $global_config_dir = $_SERVER['HOME'] . substr($global_config_dir, 1);
     }
     if (!is_dir($global_config_dir)) {
-      $output->writeln('<comment>Creating configuration folder...</comment>');
+      $output->writeln('<comment>Creating configuration folder "' . $global_config_dir . '" ...</comment>');
       mkdir($global_config_dir, 0777, TRUE);
     }
 
-    $output->writeln('<comment>Pulling commands...</comment>');
+    $output->writeln('<comment>Pulling commands to "' . $global_config_dir . '" ...</comment>');
     $url = $input->getArgument('url');
     // TODO: Download zip and unpack it instead of cloning to exclude git dependency.
     $command = [
