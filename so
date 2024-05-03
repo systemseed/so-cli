@@ -5,6 +5,8 @@ use SoCli\CommandManager;
 use SoCli\Command\PullCommands;
 use Symfony\Component\Console\Application;
 
+// The code related to autoloading was copied from https://github.com/drush-ops/drush/blob/13.x/drush.php.
+
 // We use PWD if available because getcwd() resolves symlinks, which  could take
 // us outside of the Drupal root, making it impossible to find. In addition,
 // is_dir() is used as the provided path may not be recognizable by PHP. For
