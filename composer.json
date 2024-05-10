@@ -1,0 +1,22 @@
+{
+    "name": "systemseed/so-cli",
+    "description": "Shell Orchestration CLI",
+    "require": {
+        "symfony/console": "^7.0",
+        "symfony/yaml": "^7.0",
+        "symfony/process": "^7.0",
+        "symfony/dotenv": "^7.0"
+    },
+    "bin": [
+        "so"
+    ],
+    "license": "GPL-3.0-only",
+    "autoload": {
+        "psr-4": {
+            "SoCli\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
