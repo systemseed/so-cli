@@ -38,7 +38,7 @@ if (!$loader) {
 
 $application = new Application();
 $application->setName('Shell Orchestration CLI');
-$application->setVersion(InstalledVersions::getVersion('systemseed/so-cli'));
+$application->setVersion(InstalledVersions::getPrettyVersion('systemseed/so-cli'));
 $application->addCommands([
   new PullCommands(),
 ]);
