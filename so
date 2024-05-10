@@ -4,6 +4,7 @@
 use SoCli\CommandManager;
 use SoCli\Command\PullCommands;
 use Symfony\Component\Console\Application;
+use Composer\InstalledVersions;
 
 // The code related to autoloading was copied from https://github.com/drush-ops/drush/blob/13.x/drush.php.
 
@@ -36,6 +37,8 @@ if (!$loader) {
 }
 
 $application = new Application();
+$application->setName('Shell Orchestration CLI');
+$application->setVersion(InstalledVersions::getVersion('systemseed/so-cli'));
 $application->addCommands([
   new PullCommands(),
 ]);
