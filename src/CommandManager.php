@@ -18,23 +18,43 @@ class CommandManager {
     $this->configuration = new Configuration();
   }
 
-  public function getCommands(): array {
-    $config_dir = $this->configuration->getConfigDir();
-    $config = $this->configuration->loadConfigFile();
-    $command_configs = $this->configuration->loadCommandConfigFiles();
+  public function getGlobalCommands(): array {
+    $global_config_dir = $this->configuration->getGlobalConfigDir();
+    // Unfortunately realpath doesn't handle '~' in path.
+    if (str_starts_with($global_config_dir, '~')) {
+      $global_config_dir = $_SERVER['HOME'] . substr($global_config_dir, 1);
+    }
 
+    return $this->getCommandsFromFolder($global_config_dir);
+  }
+
+  public function getLocalCommands(): array {
+    $config_dir = $this->configuration->getConfigDir();
+    return $this->getCommandsFromFolder($config_dir);
+  }
+
+  public function getCommands(): array {
+    $global_commands = $this->getGlobalCommands();
+    $local_commands = $this->getLocalCommands();
+    $commands = array_merge($global_commands, $local_commands);
+    return array_values($commands);
+  }
+
+  public function getCommandsFromFolder($config_dir): array {
+    $commands = [];
+    $config = $this->configuration->loadConfigFile();
     // Load env files.
     if (isset($config['env_file'])) {
       $dotenv = new Dotenv();
       foreach ($config['env_file'] as $env_file) {
-        $env_file = realpath($config_dir . '/' . $env_file);
+        $env_file = realpath($this->configuration->getConfigDir() . '/' . $env_file);
         if ($env_file) {
           $dotenv->load($env_file);
         }
       }
     }
 
-    $commands = [];
+    $command_configs = $this->configuration->loadCommandConfigFiles($config_dir);
     foreach ($command_configs as $command_config) {
       $command = new Command();
       $command->setName($command_config['name']);
@@ -103,7 +123,7 @@ class CommandManager {
         return Command::SUCCESS;
       });
 
-      $commands[] = $command;
+      $commands[$command->getName()] = $command;
     }
 
     return $commands;
