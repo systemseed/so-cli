@@ -1,6 +1,7 @@
 {
     "name": "systemseed/so-cli",
     "description": "Shell Orchestration CLI",
+    "version": "0.0.1",
     "require": {
         "symfony/console": "^7.0",
         "symfony/yaml": "^7.0",
