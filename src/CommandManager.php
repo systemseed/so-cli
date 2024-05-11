@@ -45,6 +45,9 @@ class CommandManager {
    */
   public function getLocalCommands(): array {
     $config_dir = $this->configuration->getConfigDir();
+    if (!$config_dir) {
+      return [];
+    }
     return $this->getCommandsFromFolder($config_dir);
   }
 
