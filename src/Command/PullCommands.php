@@ -19,15 +19,24 @@ class PullCommands extends Command {
 
   protected Configuration $configuration;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct() {
     parent::__construct();
     $this->configuration = new Configuration();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function configure(): void {
     $this->addArgument('url', InputArgument::REQUIRED, 'Git repository URL');
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function execute(InputInterface $input, OutputInterface $output): int {
     $global_config_dir = $this->configuration->getGlobalConfigDir();
     // Unfortunately realpath doesn't handle '~' in path.
@@ -35,14 +44,18 @@ class PullCommands extends Command {
       $global_config_dir = $_SERVER['HOME'] . substr($global_config_dir, 1);
     }
     if (!is_dir($global_config_dir)) {
+      // TODO: Print only in verbose mode.
       $output->writeln('<comment>Creating configuration folder "' . $global_config_dir . '" ...</comment>');
       mkdir($global_config_dir, 0777, TRUE);
     }
 
+    // TODO: Print only in verbose mode.
     $output->writeln('<comment>Pulling commands to "' . $global_config_dir . '" ...</comment>');
     $url = $input->getArgument('url');
-    // TODO 1: Download zip and unpack it instead of cloning to exclude git dependency.
-    // TODO 2: Replace md5($url) with real folder name and allows to pass destination folder.
+    // TODO: Download zip and unpack it instead of cloning to exclude git dependency.
+    // TODO: Replace md5($url) with real folder name and allows to pass destination folder.
+    // TODO: Do not ever remove anything without user confirmation.
+    //   Just stop execution and notify the user instead. We don't have to solve such problems.
     $process = Process::fromShellCommandline('rm -rf ' . md5($url), $global_config_dir);
     $process->run();
 
@@ -63,6 +76,7 @@ class PullCommands extends Command {
       throw new ProcessFailedException($process);
     }
 
+    // TODO: Print only in verbose mode.
     $output->writeln('<comment>Done.</comment>');
     return Command::SUCCESS;
   }

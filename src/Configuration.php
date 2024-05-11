@@ -81,19 +81,43 @@ class Configuration {
   }
 
   /**
+   * Recursively scans and returns list of command config files.
+   *
+   * @param string $dir
+   *   The path to folder for scanning for commands.
+   *
+   * @return \Generator
+   *   The list of command config file paths.
+   */
+  private function getCommandConfigFiles(string $dir): \Generator {
+    if (!is_dir($dir)) {
+      throw new \RuntimeException("{$dir} is not a directory");
+    }
+
+    $it = new \RecursiveDirectoryIterator($dir);
+    $it = new \RecursiveIteratorIterator($it);
+    $it = new \RegexIterator($it, '/\.command\.yaml$/', \RegexIterator::MATCH);
+
+    yield from $it;
+  }
+
+  /**
    * Returns commands from config files.
+   *
+   * @param string $commands_dir
+   *   The path to commands folder.
    *
    * @return array
    *   The commands config array.
    */
-  public function loadCommandConfigFiles(): array {
-    if (!$this->configDir) {
+  public function loadCommandConfigFiles(string $commands_dir): array {
+    if (!$commands_dir) {
       return [];
     }
 
     $commands = [];
-    foreach (glob($this->configDir . '/*.command.yaml') as $file_path) {
-      $commands[] = Yaml::parseFile($file_path);
+    foreach ($this->getCommandConfigFiles($commands_dir) as $file) {
+      $commands[] = Yaml::parseFile($file->getPathname());
     }
 
     return $commands;

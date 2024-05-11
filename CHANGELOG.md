@@ -5,6 +5,12 @@ All notable changes to so-sli will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+- Implemented recursive scanning for command files in config folder
+- Implemented scanning for global commands
+- Implemented simple (by command `name` value) overriding of "global" commands by "local" commands
+
 ## [0.0.3]
 
 - Updated Symfony dependencies
