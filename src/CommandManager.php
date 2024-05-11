@@ -14,10 +14,19 @@ class CommandManager {
 
   protected Configuration $configuration;
 
+  /**
+   * Constructs a Command manager object.
+   */
   public function __construct() {
     $this->configuration = new Configuration();
   }
 
+  /**
+   * Returns global commands.
+   *
+   * @return array
+   *   The array of commands objects.
+   */
   public function getGlobalCommands(): array {
     $global_config_dir = $this->configuration->getGlobalConfigDir();
     // Unfortunately realpath doesn't handle '~' in path.
@@ -28,11 +37,23 @@ class CommandManager {
     return $this->getCommandsFromFolder($global_config_dir);
   }
 
+  /**
+   * Returns local commands.
+   *
+   * @return array
+   *   The array of commands objects.
+   */
   public function getLocalCommands(): array {
     $config_dir = $this->configuration->getConfigDir();
     return $this->getCommandsFromFolder($config_dir);
   }
 
+  /**
+   * Returns combined global and local commands.
+   *
+   * @return array
+   *   The array of commands objects.
+   */
   public function getCommands(): array {
     $global_commands = $this->getGlobalCommands();
     $local_commands = $this->getLocalCommands();
@@ -40,7 +61,16 @@ class CommandManager {
     return array_values($commands);
   }
 
-  public function getCommandsFromFolder($config_dir): array {
+  /**
+   * Returns commands for a given folder.
+   *
+   * @param string $config_dir
+   *   The path to folder for scanning for commands.
+   *
+   * @return array
+   *   The array of commands objects.
+   */
+  public function getCommandsFromFolder(string $config_dir): array {
     $commands = [];
     $config = $this->configuration->loadConfigFile();
     // Load env files.
