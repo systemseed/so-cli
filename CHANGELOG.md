@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Added "so" prefix to internal arguments
 - Implemented recursive scanning for command files in config folder
 - Implemented scanning for global commands
 - Implemented simple (by command `name` value) overriding of "global" commands by "local" commands

@@ -10,6 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Process\Process;
 
+/**
+ * Defines the Command manager class.
+ */
 class CommandManager {
 
   protected Configuration $configuration;
@@ -60,6 +63,7 @@ class CommandManager {
   public function getCommands(): array {
     $global_commands = $this->getGlobalCommands();
     $local_commands = $this->getLocalCommands();
+    // @todo Handle same alias for different commands.
     $commands = array_merge($global_commands, $local_commands);
     return array_values($commands);
   }
@@ -100,7 +104,7 @@ class CommandManager {
         $command->setDescription($command_config['description']);
       }
 
-      // TODO: Handle the configuration values.
+      // @todo Handle the configuration values.
       $command->addArgument(
         'arguments',
         InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
@@ -127,21 +131,21 @@ class CommandManager {
             $option['shortcut'],
             $type,
             $option['description'],
-            $option['default'] ?? null,
+            $option['default'] ?? NULL,
             $option['suggested_values'],
           );
         }
       }
 
-      $command->setCode(function(InputInterface $input, OutputInterface $output) use ($config_dir, $command_config): int {
-        // TODO check how many arguments (required, optional).
+      $command->setCode(function (InputInterface $input, OutputInterface $output) use ($config_dir, $command_config): int {
+        // @todo check how many arguments (required, optional).
         $arguments = [
-          'args' => implode(' ', $input->getArgument('arguments')),
-          'command' => substr($input->__toString(), strlen($input->getFirstArgument()) + 1)
+          'so_args' => implode(' ', $input->getArgument('arguments')),
+          'so_command' => substr($input->__toString(), strlen($input->getFirstArgument()) + 1),
         ];
 
         foreach ($input->getArgument('arguments') as $key => $argument) {
-          $arguments['arg_' . $key + 1] = $argument;
+          $arguments['so_arg_' . $key + 1] = $argument;
         }
 
         $process = Process::fromShellCommandline($command_config['command']);
@@ -150,7 +154,7 @@ class CommandManager {
         $process->run(function ($type, $buffer) {
           echo $buffer;
         }, $_ENV + $input->getOptions() + $arguments + [
-          'project_root' => realpath($config_dir . '/..' ?? '.')
+          'so_project_root' => realpath($config_dir . '/..' ?? '.'),
         ]);
 
         return Command::SUCCESS;

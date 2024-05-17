@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="raiders">
+  <description>PHP CodeSniffer configuration for raiders development.</description>
+  <!-- Check custom modules and themes. -->
+  <file>./</file>
+  <!-- Ignore any files in these paths. -->
+  <exclude-pattern>*/.git/*</exclude-pattern>
+  <exclude-pattern>*/config/*</exclude-pattern>
+  <exclude-pattern>*/icons/*</exclude-pattern>
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*/dist/*</exclude-pattern>
+  <exclude-pattern>*/docs/*</exclude-pattern>
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+  <exclude-pattern>*rules_export.txt</exclude-pattern>
+
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml"/>
+  <!-- For colored cli output -->
+  <arg name="colors"/>
+  <!-- To show rule names. Equivalent to "phpcs -s" -->
+  <arg value="sp"/>
+
+  <config name="drupal_core_version" value="10"/>
+
+  <rule ref="Drupal">
+    <!-- Example how you would disable a rule you are not compliant with yet:
+    <exclude name="Drupal.Commenting.Deprecated"/>
+    -->
+  </rule>
+  <rule ref="DrupalPractice"/>
+
+  <!-- Example how you would disable an external rule you do not like:
+  <rule ref="PEAR.Functions.ValidDefaultValue.NotAtEnd">
+    <severity>0</severity>
+  </rule>
+  -->
+</ruleset>

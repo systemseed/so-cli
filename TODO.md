@@ -4,7 +4,7 @@
 
 - Add flavour support
 - Add project config file support (in progress)
-- Add support of dependant commands
+- Add support of dependant commands (implemented for preparing env variables)
 - Add support of reusable bash functions?
 - Improve and streamline variable naming for arguments and options. Possibly allow changing arg names.
 - Allow command override on per project basis (partially implemented, project commands always override global ones, in case of multiple overrides, the last appeared command takes precedence).
