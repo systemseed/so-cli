@@ -4,6 +4,9 @@ namespace SoCli;
 
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Defines the Configuration class.
+ */
 class Configuration {
 
   protected ?string $configDir;
@@ -23,20 +26,20 @@ class Configuration {
    */
   protected function locateConfigDir(string $current_dir): ?string {
     $config_dir = $current_dir . '/' . Constants::SO_CLI_CONFIG_FOLDER_NAME;
-    // TODO: Print iterated folders in verbose mode ($output->isVerbose()).
+    // @todo Print iterated folders in verbose mode ($output->isVerbose()).
     if (is_dir($config_dir)) {
       return $config_dir;
     }
-    else if ($current_dir != '/') {
+    elseif ($current_dir != '/') {
       $parent_dir = realpath($current_dir . '/..');
       if (!$parent_dir) {
-        return null;
+        return NULL;
       }
 
       return $this->locateConfigDir($parent_dir);
     }
 
-    return null;
+    return NULL;
   }
 
   /**

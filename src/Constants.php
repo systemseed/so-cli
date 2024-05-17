@@ -2,6 +2,9 @@
 
 namespace SoCli;
 
+/**
+ * Defines the Constant class.
+ */
 class Constants {
 
   /**

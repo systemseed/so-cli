@@ -11,6 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
+/**
+ * Defines the Pull commands command.
+ */
 #[AsCommand(
   name: 'so-cli:pull-commands',
   description: 'Pulls commands from git repository.',
@@ -44,17 +47,17 @@ class PullCommands extends Command {
       $global_config_dir = $_SERVER['HOME'] . substr($global_config_dir, 1);
     }
     if (!is_dir($global_config_dir)) {
-      // TODO: Print only in verbose mode.
+      // @todo Print only in verbose mode.
       $output->writeln('<comment>Creating configuration folder "' . $global_config_dir . '" ...</comment>');
       mkdir($global_config_dir, 0777, TRUE);
     }
 
-    // TODO: Print only in verbose mode.
+    // @todo Print only in verbose mode.
     $output->writeln('<comment>Pulling commands to "' . $global_config_dir . '" ...</comment>');
     $url = $input->getArgument('url');
-    // TODO: Download zip and unpack it instead of cloning to exclude git dependency.
-    // TODO: Replace md5($url) with real folder name and allows to pass destination folder.
-    // TODO: Do not ever remove anything without user confirmation.
+    // @todo Download zip and unpack it instead of cloning to exclude git dependency.
+    // @todo Replace md5($url) with real folder name and allows to pass destination folder.
+    // @todo Do not ever remove anything without user confirmation.
     //   Just stop execution and notify the user instead. We don't have to solve such problems.
     $process = Process::fromShellCommandline('rm -rf ' . md5($url), $global_config_dir);
     $process->run();
@@ -76,8 +79,9 @@ class PullCommands extends Command {
       throw new ProcessFailedException($process);
     }
 
-    // TODO: Print only in verbose mode.
+    // @todo Print only in verbose mode.
     $output->writeln('<comment>Done.</comment>');
     return Command::SUCCESS;
   }
+
 }

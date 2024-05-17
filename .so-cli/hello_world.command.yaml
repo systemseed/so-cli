@@ -15,5 +15,5 @@ arguments:
   optional: 2
 command: |
   echo "$greeting world"
-  echo "args: $args"
-  echo "arg 1: $arg_1"
+  echo "args: $so_args"
+  echo "arg 1: $so_arg_1"

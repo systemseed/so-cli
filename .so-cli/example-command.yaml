@@ -17,7 +17,12 @@ options:
 arguments:
   required: 1
   optional: 2
+# Variables available for using in commands:
+#  - $so_args: list of all arguments divided by space.
+#  - $so_arg_N: The nth argument, for example $so_arg_1 is the first argument.
+#  - $so_command: The current command excluding "so", for example for 'so command arg' command it will be 'command arg'.
+#  - $so_project_root: The root folder of the project, if '.so-cli' folder is found.
 command: |
   echo "Example string: $example"
-  echo "args: $args"
-  echo "arg 1: $arg_1"
+  echo "args: $so_args"
+  echo "arg 1: $so_arg_1"
