@@ -32,10 +32,6 @@ class CommandManager {
    */
   public function getGlobalCommands(): array {
     $global_config_dir = $this->configuration->getGlobalConfigDir();
-    // Unfortunately realpath doesn't handle '~' in path.
-    if (str_starts_with($global_config_dir, '~')) {
-      $global_config_dir = $_SERVER['HOME'] . substr($global_config_dir, 1);
-    }
 
     return $this->getCommandsFromFolder($global_config_dir);
   }
