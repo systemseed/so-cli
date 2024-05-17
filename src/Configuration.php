@@ -43,10 +43,10 @@ class Configuration {
   }
 
   /**
-   * Returns config files folder.
+   * Returns project config folder.
    *
    * @return string|null
-   *   The config files folder.
+   *   The project config folder.
    */
   public function getConfigDir(): ?string {
     return $this->configDir;
@@ -55,13 +55,18 @@ class Configuration {
   /**
    * Returns global config folder.
    *
-   * @return string|null
+   * @return string
    *   The global config folder.
    */
-  public function getGlobalConfigDir(): ?string {
+  public function getGlobalConfigDir(): string {
     $config = $this->loadConfigFile();
+    $global_config_dir = $config['global_config_folder'] ?? Constants::SO_CLI_GLOBAL_CONFIG_FOLDER;
+    // Unfortunately realpath doesn't handle '~' in path.
+    if (str_starts_with($global_config_dir, '~')) {
+      $global_config_dir = $_SERVER['HOME'] . substr($global_config_dir, 1);
+    }
 
-    return $config['global_config_folder'] ?? Constants::SO_CLI_GLOBAL_CONFIG_FOLDER;
+    return $global_config_dir;
   }
 
   /**
