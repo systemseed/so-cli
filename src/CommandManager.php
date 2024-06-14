@@ -133,7 +133,7 @@ class CommandManager {
         }
       }
 
-      $command->setCode(function (InputInterface $input, OutputInterface $output) use ($config_dir, $command_config): int {
+      $command->setCode(function (InputInterface $input, OutputInterface $output) use ($command_config): int {
         // @todo check how many arguments (required, optional).
         $arguments = [
           'so_args' => implode(' ', $input->getArgument('arguments')),
@@ -144,13 +144,15 @@ class CommandManager {
           $arguments['so_arg_' . $key + 1] = $argument;
         }
 
+        $local_config_dir = $this->configuration->getConfigDir();
+
         $process = Process::fromShellCommandline($command_config['command']);
         $process->setTty(TRUE);
         $process->setTimeout(NULL);
         $process->run(function ($type, $buffer) {
           echo $buffer;
         }, $_ENV + $input->getOptions() + $arguments + [
-          'so_project_root' => realpath($config_dir . '/..' ?? '.'),
+          'so_project_root' => realpath($local_config_dir . '/..' ?? '.'),
         ]);
 
         return Command::SUCCESS;

@@ -82,7 +82,7 @@ class Configuration {
 
     $config_file = realpath($this->configDir . '/config.yaml');
     if ($config_file) {
-      return Yaml::parseFile($config_file);
+      return Yaml::parseFile($config_file) ?? [];
     }
 
     return [];
