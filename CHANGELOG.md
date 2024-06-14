@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed determining of project root folder in case of using global command
 - Improved 'so-cli:pull-commands' command to support both, git repo and zip archive URLs
 - Added "so" prefix to internal arguments
 - Implemented recursive scanning for command files in config folder
