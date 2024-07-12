@@ -28,3 +28,4 @@
 
 - META: Rewrite on native compilable language (presumably Go).
 - Add support of so-called "package manager" for exchanging command files.
+- Add support of default values for options and arguments, for example `so sh` may have default argument `php` (currently done on the command level).
