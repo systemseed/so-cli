@@ -102,7 +102,7 @@ class Configuration {
       throw new \RuntimeException("{$dir} is not a directory");
     }
 
-    $it = new \RecursiveDirectoryIterator($dir);
+    $it = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::FOLLOW_SYMLINKS);
     $it = new \RecursiveIteratorIterator($it);
     $it = new \RegexIterator($it, '/\.command\.yaml$/', \RegexIterator::MATCH);
 
