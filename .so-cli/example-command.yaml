@@ -22,6 +22,8 @@ arguments:
 #  - $so_arg_N: The nth argument, for example $so_arg_1 is the first argument.
 #  - $so_command: The current command excluding "so", for example for 'so command arg' command it will be 'command arg'.
 #  - $so_project_root: The root folder of the project, if '.so-cli' folder is found.
+#  Add 'set -e' to command for interrupting execution on any error.
+#  See https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html
 command: |
   echo "Example string: $example"
   echo "args: $so_args"

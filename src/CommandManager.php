@@ -155,7 +155,8 @@ class CommandManager {
           'so_project_root' => realpath($local_config_dir . '/..' ?? '.'),
         ]);
 
-        return Command::SUCCESS;
+        // Return actual exit code for managing command chaining.
+        return $process->getExitCode();
       });
 
       $commands[$command->getName()] = $command;
