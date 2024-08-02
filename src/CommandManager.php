@@ -113,11 +113,11 @@ class CommandManager {
           $type = InputOption::VALUE_NONE | InputOption::VALUE_NEGATABLE;
 
           $required = $option['required'] ? InputOption::VALUE_REQUIRED : InputOption::VALUE_OPTIONAL;
-          if ($option['type'] == 'array') {
-            $type = $required | InputOption::VALUE_IS_ARRAY;
-          }
-          else {
-            if ($option['type'] == 'string') {
+          if (!empty($option['type'])) {
+            if ($option['type'] == 'array') {
+              $type = $required | InputOption::VALUE_IS_ARRAY;
+            }
+            else if ($option['type'] == 'string') {
               $type = $required;
             }
           }
@@ -128,7 +128,7 @@ class CommandManager {
             $type,
             $option['description'],
             $option['default'] ?? NULL,
-            $option['suggested_values'],
+            $option['suggested_values'] ?? [],
           );
         }
       }
