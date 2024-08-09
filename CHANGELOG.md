@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Improved flag handling
 - Improved returning of exit code
 - Added support of symlinks for searching commands
 - Fixed determining of project root folder in case of using global command
